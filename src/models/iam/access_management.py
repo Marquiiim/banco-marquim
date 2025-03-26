@@ -54,7 +54,7 @@ class User:
     def verify_password(self, input_password: str) -> bool:
         return bcrypt.checkpw(input_password.encode(), self._password_hash)
 
-    def verification_login(self, input_email: str, input_password: str) -> bool:
+    def verify_login(self, input_email: str, input_password: str) -> bool:
         try:
             data = self.load_data_storage()
             if input_email not in data:
