@@ -5,6 +5,7 @@
         "deposit",
         "gensalt",
         "hashpw",
+        "Setters",
         "stored"
     ]
 }
