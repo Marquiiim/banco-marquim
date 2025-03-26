@@ -82,8 +82,8 @@ class Client:
             self._balance = data["Informações Bancárias"]["Saldo"]
             self._withdraw_limit = data["Informações Bancárias"]["Limite"]
             self.extract = data["Informações Bancárias"]["Extrato"]
-        except:
-            print("[ERROR] Impossível coletar informações sobre a conta, tente novamente mais tarde.")
+        except Exception as e:
+            print(f"[ERROR] Erro inesperado: {e}")
         
     def _load_json(self, file=_CREDENTIALS_FILE) -> dict[str, any]:
         with open(file, "r", encoding='utf-8') as f:
