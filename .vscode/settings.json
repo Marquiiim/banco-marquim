@@ -3,9 +3,11 @@
         "acess",
         "checkpw",
         "deposit",
+        "dinamic",
         "gensalt",
         "hashpw",
         "Setters",
-        "stored"
+        "stored",
+        "SUCESS"
     ]
 }

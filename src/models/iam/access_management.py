@@ -1,23 +1,76 @@
 from datetime import datetime
-import json
-import bcrypt
-import re
+from pathlib import Path
+import json, bcrypt, re
 
 # NESTE ARQUIVO ESTÁ A CLASSE E OS MÉTODOS DE AUTENTICAÇÃO.
 
 class User:
     # ========= CONSTANTES E CONFIGURAÇÕES =========
-    _CREDENTIALS_FILE = "../../records/credentials.json"
+    _CREDENTIALS_FILE = Path(__file__).parent.parent.parent / "records" / "credentials.json"
     _EMAIL_REGEX = r"[^@]+@[^@]+\.[^@]+"
     
     # ========= INICIALIZAÇÃO =========
     def __init__(self, name, email, password):
         self._name = name
-        self.email = email  # Usa o setter para validação
+        self.email = email
         self._password_hash = self._hash_password(password)
         self._last_acess = None
 
-    # ========= PROPRIEDADES E SETTERS =========
+    # ========= MÉTODOS ESTÁTICOS =========
+    @staticmethod
+    def login_area():
+        print("========= ÁREA DE LOGIN =========")
+        email = input("E-mail: ").strip()
+        senha = input("Senha: ").strip()
+        print("==================================")
+        return User.verify_login(input_email=email, input_password=senha)
+    
+    @staticmethod
+    def register_area():
+        print("========= ÁREA DE REGISTRO =========")
+        nome = input("Nome: ").strip()
+        email = input("E-mail: ").strip()
+        senha = input("Senha: ").strip()
+        confirm_senha = input("Repita sua senha: ").strip()
+        print("==================================")
+        if senha != confirm_senha:
+            print("[ERROR] Senha não coincidem, tente novamente.")
+        else:
+            try:
+                new_user = User(
+                    name = nome,
+                    email = email,
+                    password = senha
+                )
+                new_user.last_acess = datetime.now()
+                new_user.data_storage()
+                print("[SUCESS] Registrado com sucesso!")
+                return True
+            except ValueError as e:
+                print(f"[ERROR]{str(e)}")
+                return False
+    
+    @staticmethod
+    def verify_login(input_email, input_password) -> bool:
+            data = User.load_data_storage()
+            if input_email not in data:
+                print("[ERROR] E-mail não registrado.")
+                return False
+            stored_hash = data[input_email]["Senha"].encode()
+            if not bcrypt.checkpw(input_password.encode(), stored_hash):
+                print("[ERROR] Senha digitada está errada.")
+                return False
+            return True
+        
+    @staticmethod
+    def load_data_storage() -> dict:
+        try:
+            with open(User._CREDENTIALS_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
+
+    # ========= PROPERTIES E SETTERS =========
     @property
     def email(self) -> str:
         return self._email
@@ -50,25 +103,9 @@ class User:
     # ========= MÉTODOS DE AUTENTICAÇÃO =========
     def _hash_password(self, password: str) -> bytes:
         return bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-    
-    def verify_password(self, input_password: str) -> bool:
-        return bcrypt.checkpw(input_password.encode(), self._password_hash)
-
-    def verify_login(self, input_email: str, input_password: str) -> bool:
-        try:
-            data = self.load_data_storage()
-            if input_email not in data:
-                print("[ERROR] E-mail não registrado.")
-                return False
-            stored_hash = data[input_email]["Senha"].encode()
-            return bcrypt.checkpw(input_password.encode(), stored_hash)
-        except Exception as e:
-            print(f"[ERROR] Falha na verificação: {str(e)}")
-            return False
 
     # ========= MANIPULAÇÃO DE DADOS =========
-    def data_storage(self, file: str = None) -> None:
-        file = file or self._CREDENTIALS_FILE
+    def data_storage(self) -> None:
         data = {
             self._email: {
                 "Nome": self._name,
@@ -85,16 +122,11 @@ class User:
             }
         }
         
-        existing_data = self._load_json(file)
+        existing_data = User.load_data_storage()        
         existing_data.update(data)
 
-        with open(file, "w") as f:
-            json.dump(existing_data, f, indent=4)
-
-    def load_data_storage(self, file: str = _CREDENTIALS_FILE) -> dict:
-        return self._load_json(file)
-
-    # ========= MÉTODOS AUXILIARES PRIVADOS =========
-    def _load_json(self, file_path: str) -> dict:
-            with open(file_path, "r") as f:
-                return json.load(f)
+        try:
+            with open(self._CREDENTIALS_FILE, "w", encoding="utf-8") as f:
+                json.dump(existing_data, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"[ERROR] Falha ao salvar dados: {str(e)}")
