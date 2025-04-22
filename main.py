@@ -10,7 +10,8 @@ while True:
 """).upper()
     
     if options == "L":
-        if User.login_area():
+        client = User.login_area() 
+        if client:
             while True:
                 bank_options = input("""
 ========= ÁREA DE OPERAÇÕES =========
@@ -21,7 +22,7 @@ while True:
 =====================================
 """).upper()
                 if bank_options == "S":
-                    pass
+                    client.withdraw_template()
                 elif bank_options == "D":
                     Client.deposit_client()
                 elif bank_options == "E":

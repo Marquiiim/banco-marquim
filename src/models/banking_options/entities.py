@@ -16,6 +16,10 @@ class Client:
 
     # ========= PROPERTIES E SETTERS =========
     @property
+    def user(self):
+        return self._user
+    
+    @property
     def balance(self):
         return self._balance
     
@@ -45,19 +49,23 @@ class Client:
         self.extract["Depósitos"].append(f"R${value:.2f} | {info_transaction}")
         print(f"Depósito de R${value:.2f} realizado com sucesso.")
         return True
-    
 
     def withdraw_template(self):
-        input("""
-=========== ÁREA DE SAQUE ===========       
+        print(f"""
+=========== ÁREA DE SAQUE ===========
+        
+    SALDO ATUAL: R${self.balance}
+              
 DIGITE O VALOR DESEJADO PARA SACAR:       
-========================================
+=====================================
 """)
         while True:
-            withdraw_value = input("Valor: R$")
-            value = float(withdraw_value)
-            return self.withdraw_value(value)
-        
+            try:
+                withdraw_value = input("Valor: R$")
+                value = float(withdraw_value)
+                return self.withdraw_client(value)
+            except ValueError:
+                print(f"[ERROR] Valor inválido. Use apenas números")
         
     def withdraw_client(self, value):
         date_now = datetime.now()
@@ -88,13 +96,18 @@ DIGITE O VALOR DESEJADO PARA SACAR:
         print("\n".join(self.extract["Saques"]) or "Nenhum saque realizado.")
 
     # ========= MANIPULAÇÃO DE DADOS =========
-    def load_user(self, email):
+    def load_user(self):
         try:
             data = self._load_json()
-            self._user = data["Nome"]
-            self._balance = data["Informações Bancárias"]["Saldo"]
-            self._withdraw_limit = data["Informações Bancárias"]["Limite"]
-            self.extract = data["Informações Bancárias"]["Extrato"]
+            print("Usuário disponíveis:", data.keys())
+            print("Tentando acessar:", self.user)
+
+            user_data = data[self.user]
+            bank_info = user_data["Informações Bancárias"]
+
+            self._balance = bank_info["Saldo"]
+            self._withdraw_limit = bank_info["Limite"]
+            self.extract = bank_info["Extrato"]
         except Exception as e:
             print(f"[ERROR] Erro inesperado: {e}")
         

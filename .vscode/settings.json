@@ -6,6 +6,7 @@
         "checkpw",
         "deposit",
         "dinamic",
+        "entitie",
         "gensalt",
         "hashpw",
         "Setters",

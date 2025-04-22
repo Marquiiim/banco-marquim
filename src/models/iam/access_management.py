@@ -25,7 +25,8 @@ class User:
         email = input("E-mail: ").strip()
         senha = input("Senha: ").strip()
         print("==================================")
-        return User.verify_login(input_email=email, input_password=senha)
+        if User.verify_login(input_email=email, input_password=senha):
+            return Client(user=email)
     
     @staticmethod
     def register_area():
