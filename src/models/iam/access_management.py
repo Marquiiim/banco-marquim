@@ -2,6 +2,8 @@ from datetime import datetime
 from pathlib import Path
 import json, bcrypt, re
 
+from ..banking_options.entities import Client 
+
 # NESTE ARQUIVO ESTÁ A CLASSE E OS MÉTODOS DE AUTENTICAÇÃO.
 
 class User:

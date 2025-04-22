@@ -4,15 +4,15 @@ import json
 class Client:
     _CREDENTIALS_FILE = "../../records/credentials.json"
 
-    def __init__(self, client=None):
-        self._client = client
+    def __init__(self, user=None):
+        self._user = user
         self._balance = 0
         self._withdraw_limit = 0
         self.number_transactions = 0
         self.extract = {"Depósitos": [], "Saques": []}
 
-        if client:
-            self.data_loading()
+        if user:
+            self.load_user()
 
     # ========= PROPERTIES E SETTERS =========
     @property
@@ -45,6 +45,19 @@ class Client:
         self.extract["Depósitos"].append(f"R${value:.2f} | {info_transaction}")
         print(f"Depósito de R${value:.2f} realizado com sucesso.")
         return True
+    
+
+    def withdraw_template(self):
+        input("""
+=========== ÁREA DE SAQUE ===========       
+DIGITE O VALOR DESEJADO PARA SACAR:       
+========================================
+""")
+        while True:
+            withdraw_value = input("Valor: R$")
+            value = float(withdraw_value)
+            return self.withdraw_value(value)
+        
         
     def withdraw_client(self, value):
         date_now = datetime.now()
@@ -75,10 +88,10 @@ class Client:
         print("\n".join(self.extract["Saques"]) or "Nenhum saque realizado.")
 
     # ========= MANIPULAÇÃO DE DADOS =========
-    def data_loading(self):
+    def load_user(self, email):
         try:
             data = self._load_json()
-            self._client = data["Nome"]
+            self._user = data["Nome"]
             self._balance = data["Informações Bancárias"]["Saldo"]
             self._withdraw_limit = data["Informações Bancárias"]["Limite"]
             self.extract = data["Informações Bancárias"]["Extrato"]
