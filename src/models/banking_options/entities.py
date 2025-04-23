@@ -1,8 +1,9 @@
 from datetime import datetime
+from pathlib import Path
 import json
 
 class Client:
-    _CREDENTIALS_FILE = "../../records/credentials.json"
+    _CREDENTIALS_FILE = Path(__file__).parent.parent.parent / "records" / "credentials.json"
 
     def __init__(self, user=None):
         self._user = user
@@ -36,6 +37,24 @@ class Client:
         return self._withdraw_limit
 
     # ========= OPERAÇÕES BANCÁRIAS =========
+    def deposit_template(self):
+        print(f"""
+=========== ÁREA DE DEPÓSITO ===========
+        
+    SALDO ATUAL: R${self.balance}
+              
+DIGITE O VALOR DESEJADO PARA DEPOSITAR:       
+========================================
+""")
+        while True:
+            try:
+                deposit_value = input("Valor: R$")
+                value = float(deposit_value)
+                return self.deposit_client(value)
+            except ValueError:
+                print(f"[ERROR] Valor inválido. Use apenas números")
+
+
     def deposit_client(self, value):
         date_now = datetime.now()
         info_transaction = date_now.strftime('%d/%m/%Y - %H:%M:%S')
@@ -80,12 +99,12 @@ DIGITE O VALOR DESEJADO PARA SACAR:
         elif value > self.balance:
             print("[ERROR] Saldo insuficiente para o saque, tente novamente.")
             return False
-        
-        self.balance -= value
-        self.number_transactions += 1
-        self.extract["Saques"].append(f"R${value:.2f} | {info_transaction}")
-        print(f"Saque de R${value:.2f} realizado com sucesso.")
-        return True
+        else:
+            self.balance -= value
+            self.number_transactions += 1
+            self.extract["Saques"].append(f"R${value:.2f} |     {info_transaction}")
+            print(f"Saque de R${value:.2f} realizado com sucesso.")
+            return True
 
     # ========= CONSULTAS =========
     def extract_client(self):
@@ -99,8 +118,6 @@ DIGITE O VALOR DESEJADO PARA SACAR:
     def load_user(self):
         try:
             data = self._load_json()
-            print("Usuário disponíveis:", data.keys())
-            print("Tentando acessar:", self.user)
 
             user_data = data[self.user]
             bank_info = user_data["Informações Bancárias"]

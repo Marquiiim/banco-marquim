@@ -24,11 +24,11 @@ while True:
                 if bank_options == "S":
                     client.withdraw_template()
                 elif bank_options == "D":
-                    Client.deposit_client()
+                    client.deposit_template()
                 elif bank_options == "E":
-                    Client.extract_client()
+                    client.extract_client()
                 else:
-                    pass
+                    raise SystemExit
 
     elif options == "R":
         if User.register_area():
