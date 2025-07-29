@@ -1,46 +1,32 @@
-# 🏦 Sistema Bancário em Python
+## 🏦 BankSystem – Sistema Bancário em Python com Orientação a Objetos
 
-Este projeto foi desenvolvido como parte dos meus estudos em **Python** e **Programação Orientada a Objetos (POO)**, com o objetivo de simular um sistema bancário real e aplicar conceitos fundamentais de back-end em um ambiente prático.
+### 🧾 Descrição
 
----
+O **BankSystem** é um sistema bancário completo desenvolvido em **Python**, com o objetivo de simular uma experiência real de uso bancário e reforçar meus conhecimentos em **programação orientada a objetos (POO)**. O projeto foi construído do zero como um desafio pessoal, focando em conceitos fundamentais de backend, segurança e estrutura de dados.
 
-## 💡 Objetivo
+### 🧩 Funcionalidades
 
-Criar do zero um sistema bancário completo, com autenticação segura, persistência de dados e operações bancárias básicas, desafiando-me a resolver problemas reais de lógica e estruturação de código.
+* 🔐 **Sistema de autenticação completo**, com login, registro e validações de e-mail/senha
+* 🔑 **Criptografia de dados** sensíveis para maior segurança
+* 📦 **Banco de dados local em JSON**, com usuários identificados por chave única (e-mail)
+* 💰 **Depósito e saque com limites diários**, incluindo controle de saldo
+* 🧾 **Geração de extrato** com data e hora para cada transação
+* 🔄 **Logout e troca segura de usuários**, permitindo alternar contas com segurança
 
----
+### 🛠️ Tecnologias Utilizadas
 
-## ⚙️ Funcionalidades
+* Python 3
+* Programação Orientada a Objetos (POO)
+* Bibliotecas nativas e auxiliares do Python (`json`, `datetime`, `hashlib`, entre outras)
+* Armazenamento e persistência de dados via **JSON**
 
-* 🔐 **Sistema de login e registro** com validações de e-mail e senha, incluindo **criptografia** para garantir a segurança dos dados.
-* 🗃️ **Banco de dados local** estruturado em **JSON**, onde os dados de cada usuário são armazenados de forma individual e segura (por chave única de e-mail).
-* 💰 Funcionalidades bancárias:
+### 🚀 Diferenciais do Projeto
 
-  * Depósito
-  * Saque com controle de **limite diário**
-  * Extrato com **data e hora** registradas em cada transação
-* 🔄 **Sistema de logout**, permitindo alternar entre contas de forma segura e controlada.
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-* ✅ **Python** – Linguagem principal do projeto
-* ✅ **Programação Orientada a Objetos (POO)** – Estrutura modular e reutilizável
-* ✅ **Bibliotecas nativas** do Python – `datetime`, `json`, `hashlib`, entre outras
-* ✅ **Armazenamento local com JSON** – Simulação de um banco de dados leve e eficiente
+* 🔒 Sistema de autenticação com **criptografia de senhas**
+* 🧠 Estrutura modular orientada a objetos, separando regras de negócio, dados e interface
+* 💡 Validações de entrada robustas para garantir integridade dos dados
+* 📁 Persistência dos dados sem necessidade de banco externo, ideal para simulações e testes locais
 
 ---
 
-## 📈 Resultados
-
-Este projeto foi um marco importante na minha jornada como programador. Além de consolidar meu entendimento sobre **POO**, me proporcionou experiência com **validações**, **criptografia**, **persistência de dados** e **design de fluxo bancário**.
-
----
-
-## 🚀 Próximos Passos (ideias futuras)
-
-* Integração com interface gráfica (Tkinter ou web)
-* Migração para banco de dados SQL
-* Implementação de testes automatizados
-* Criação de painel administrativo para visualização de usuários e movimentações
+Este projeto marcou um **avanço importante na minha jornada como programador**, proporcionando prática com conceitos-chave como autenticação, estruturação de dados, controle de fluxo e modularização.
